@@ -31,3 +31,6 @@ dist-ssr
 # Local editor/assistant settings
 .claude/
 .vercel
+
+# Assessment write-up (shared directly, not committed)
+submission/
