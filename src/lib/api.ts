@@ -2,6 +2,7 @@
 // talks to Supabase directly. Each function throws an Error on failure; the
 // caller decides how to show it.
 
+import { addDays, format } from 'date-fns'
 import { supabase } from './supabase'
 import type { Activity, Comment, Label, Member, Task, TaskDraft, TaskPatch } from './types'
 
@@ -226,11 +227,9 @@ export async function seedSampleBoard(): Promise<void> {
 
   const [maya, omar, sofia] = memberRes.data.map((m) => m.id)
   const [bug, feature, design] = labelRes.data.map((l) => l.id)
-  const day = (offset: number) => {
-    const d = new Date()
-    d.setDate(d.getDate() + offset)
-    return d.toISOString().slice(0, 10)
-  }
+  // A date `offset` days from today, as "YYYY-MM-DD" in the user's own time
+  // zone. (toISOString() would use UTC, which can shift the day by one.)
+  const day = (offset: number) => format(addDays(new Date(), offset), 'yyyy-MM-dd')
 
   const samples: (Omit<TaskDraft, 'description'> & { description?: string })[] = [
     { title: 'Design the level-select screen', status: 'todo', priority: 'normal', due_date: day(6), assigneeIds: [sofia], labelIds: [design], description: 'Card layout for each world, with locked and unlocked states.' },
