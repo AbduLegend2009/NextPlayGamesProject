@@ -1,0 +1,159 @@
+@import 'tailwindcss';
+
+/*
+ * Design tokens. Every color the app uses is defined once here as a CSS
+ * variable, and Tailwind's @theme turns each into utility classes such as
+ * bg-surface or text-ink-muted. Dark mode simply swaps the variable values.
+ */
+:root {
+  --c-canvas: #f7f7f8;
+  --c-surface: #ffffff;
+  --c-sunken: #efeff1;
+  --c-hover: #ececef;
+  --c-line: #e4e4e8;
+  --c-line-strong: #d4d4da;
+  --c-ink: #1c1c21;
+  --c-ink-muted: #5f606a;
+  --c-ink-faint: #8f909a;
+  --c-accent: #5b5bd6;
+  --c-accent-hover: #4b4bc4;
+  --c-accent-soft: #ededfc;
+  --c-danger: #dc3e42;
+  --c-danger-soft: #feebec;
+  --c-warning: #b57600;
+  --c-warning-soft: #fff4d5;
+  --c-success: #2b9a66;
+  --c-success-soft: #e6f6eb;
+  --shadow-card: 0 1px 2px rgb(16 16 24 / 0.06), 0 0 0 1px rgb(16 16 24 / 0.05);
+  --shadow-lift: 0 12px 28px -6px rgb(16 16 24 / 0.22), 0 0 0 1px rgb(16 16 24 / 0.06);
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --c-canvas: #111113;
+    --c-surface: #19191c;
+    --c-sunken: #151517;
+    --c-hover: #232327;
+    --c-line: #2a2a2f;
+    --c-line-strong: #36363c;
+    --c-ink: #ededef;
+    --c-ink-muted: #a6a7b0;
+    --c-ink-faint: #74757e;
+    --c-accent: #7b7bf0;
+    --c-accent-hover: #8f8ff5;
+    --c-accent-soft: #24244a;
+    --c-danger: #ff6369;
+    --c-danger-soft: #3b1219;
+    --c-warning: #ffc53d;
+    --c-warning-soft: #302008;
+    --c-success: #3dd68c;
+    --c-success-soft: #132d21;
+    --shadow-card: 0 1px 2px rgb(0 0 0 / 0.4), 0 0 0 1px rgb(255 255 255 / 0.05);
+    --shadow-lift: 0 16px 36px -8px rgb(0 0 0 / 0.7), 0 0 0 1px rgb(255 255 255 / 0.08);
+    color-scheme: dark;
+  }
+}
+
+@theme {
+  --font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  --color-canvas: var(--c-canvas);
+  --color-surface: var(--c-surface);
+  --color-sunken: var(--c-sunken);
+  --color-hover: var(--c-hover);
+  --color-line: var(--c-line);
+  --color-line-strong: var(--c-line-strong);
+  --color-ink: var(--c-ink);
+  --color-ink-muted: var(--c-ink-muted);
+  --color-ink-faint: var(--c-ink-faint);
+  --color-accent: var(--c-accent);
+  --color-accent-hover: var(--c-accent-hover);
+  --color-accent-soft: var(--c-accent-soft);
+  --color-danger: var(--c-danger);
+  --color-danger-soft: var(--c-danger-soft);
+  --color-warning: var(--c-warning);
+  --color-warning-soft: var(--c-warning-soft);
+  --color-success: var(--c-success);
+  --color-success-soft: var(--c-success-soft);
+
+  --shadow-card: var(--shadow-card);
+  --shadow-lift: var(--shadow-lift);
+
+  --animate-fade-in: fade-in 160ms ease-out;
+  --animate-panel-in: panel-in 220ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  --animate-pop-in: pop-in 160ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  --animate-toast-in: toast-in 220ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+}
+@keyframes panel-in {
+  from { opacity: 0; transform: translateX(24px); }
+}
+@keyframes pop-in {
+  from { opacity: 0; transform: translateY(6px) scale(0.98); }
+}
+@keyframes toast-in {
+  from { opacity: 0; transform: translateY(12px); }
+}
+
+@layer base {
+  html,
+  body,
+  #root {
+    height: 100%;
+  }
+  body {
+    @apply bg-canvas text-ink antialiased;
+    font-feature-settings: 'cv11', 'ss01';
+    -webkit-tap-highlight-color: transparent;
+  }
+  /* Visible focus ring for keyboard users only. */
+  :focus-visible {
+    outline: 2px solid var(--c-accent);
+    outline-offset: 2px;
+  }
+  ::selection {
+    background: var(--c-accent-soft);
+  }
+}
+
+/* Reusable component classes. In Tailwind v4, @utility defines a class that
+   can itself be combined with other utilities and variants. */
+@utility btn {
+  @apply inline-flex h-8 items-center justify-center gap-1.5 rounded-lg px-3 text-[13px] font-medium whitespace-nowrap transition-colors disabled:cursor-not-allowed disabled:opacity-50;
+}
+@utility btn-primary {
+  @apply btn bg-accent text-white shadow-sm hover:bg-accent-hover;
+}
+@utility btn-ghost {
+  @apply btn text-ink-muted hover:bg-hover hover:text-ink;
+}
+@utility btn-outline {
+  @apply btn border border-line bg-surface text-ink shadow-sm hover:bg-hover;
+}
+@utility btn-danger {
+  @apply btn text-danger hover:bg-danger-soft;
+}
+@utility input {
+  @apply h-9 w-full rounded-lg border border-line bg-surface px-3 text-sm text-ink transition-colors outline-none placeholder:text-ink-faint focus:border-accent focus:ring-2 focus:ring-accent/20;
+}
+@utility field-label {
+  @apply mb-1.5 block text-xs font-medium text-ink-muted;
+}
+/* Thin scrollbars that match the theme. */
+@utility scroll-thin {
+  scrollbar-width: thin;
+  scrollbar-color: var(--c-line-strong) transparent;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 1ms !important;
+    transition-duration: 1ms !important;
+  }
+}
